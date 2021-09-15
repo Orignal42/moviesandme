@@ -1,10 +1,14 @@
 // Components/FilmItem.js
 
 import React from 'react'
-import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, Text, Image, TouchableOpacity,Animated, Dimensions } from 'react-native'
 import { getImageFromApi } from '../API/TMDBApi'
 import numeral from 'numeral'
 import moment from 'moment'
+
+import FadeIn from '../Animations/FadeIn'
+
+
 class FilmItem extends React.Component {
 
   _displayFavoriteImage() {
@@ -18,10 +22,26 @@ class FilmItem extends React.Component {
       )
     }
   }
+  constructor(props) {
+    super(props)
+    this.state = {
+      positionLeft: new Animated.Value(Dimensions.get('window').width)
+    }
+}
 
-  render() {
-    const { film, displayDetailForFilm } = this.props
-    return (
+componentDidMount() {
+    Animated.spring(
+      this.state.positionLeft,
+      {
+        toValue: 0
+      }
+    ).start()
+}
+
+render() {
+  const { film, displayDetailForFilm } = this.props
+  return (
+    <FadeIn>
       <TouchableOpacity
         style={styles.main_container}
         onPress={() => displayDetailForFilm(film.id)}>
@@ -42,7 +62,8 @@ class FilmItem extends React.Component {
             <Text style={styles.date_text}> {moment(new Date(film.release_date)).format('DD/MM/YYYY')}</Text>
           </View>
         </View>
-      </TouchableOpacity>
+      </TouchableOpacity> 
+     </FadeIn>
     )
   }
 }
