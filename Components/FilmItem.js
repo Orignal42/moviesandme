@@ -1,27 +1,37 @@
 // Components/FilmItem.js
-import React from 'react';
-import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
-import {getImageFromApi} from '../API/TMDBApi'
 
+import React from 'react'
+import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native'
+import { getImageFromApi } from '../API/TMDBApi'
+import numeral from 'numeral'
+import moment from 'moment'
 class FilmItem extends React.Component {
-// Components/FilmItem.js
 
+  _displayFavoriteImage() {
+    if (this.props.isFilmFavorite) {
+      // Si la props isFilmFavorite vaut true, on affiche le 🖤
+      return (
+        <Image
+          style={styles.favorite_image}
+          source={require('../Images/ic_favorite.png')}
+        />
+      )
+    }
+  }
 
-
-render() {
-
-    const {film,displayDetailForFilm} = this.props
-    
+  render() {
+    const { film, displayDetailForFilm } = this.props
     return (
-      <TouchableOpacity 
-      onPress={()=>displayDetailForFilm(film.id)}
-      style={styles.main_container}>
+      <TouchableOpacity
+        style={styles.main_container}
+        onPress={() => displayDetailForFilm(film.id)}>
         <Image
           style={styles.image}
           source={{uri: getImageFromApi(film.poster_path)}}
         />
         <View style={styles.content_container}>
           <View style={styles.header_container}>
+            {this._displayFavoriteImage()}
             <Text style={styles.title_text}>{film.title}</Text>
             <Text style={styles.vote_text}>{film.vote_average}</Text>
           </View>
@@ -29,12 +39,12 @@ render() {
             <Text style={styles.description_text} numberOfLines={6}>{film.overview}</Text>
           </View>
           <View style={styles.date_container}>
-            <Text style={styles.date_text}>Sorti le {film.release_date}</Text>
+            <Text style={styles.date_text}> {moment(new Date(film.release_date)).format('DD/MM/YYYY')}</Text>
           </View>
         </View>
       </TouchableOpacity>
     )
-}
+  }
 }
 
 const styles = StyleSheet.create({
@@ -45,8 +55,7 @@ const styles = StyleSheet.create({
   image: {
     width: 120,
     height: 180,
-    margin: 5,
-    backgroundColor: 'gray'
+    margin: 5
   },
   content_container: {
     flex: 1,
@@ -81,6 +90,11 @@ const styles = StyleSheet.create({
   date_text: {
     textAlign: 'right',
     fontSize: 14
+  },
+  favorite_image: {
+    width: 25,
+    height: 25,
+    marginRight: 5
   }
 })
 

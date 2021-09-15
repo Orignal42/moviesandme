@@ -18,10 +18,10 @@ class FilmDetail extends React.Component {
 
 
   _displayFavoriteImage() {
-    var sourceImage = require('../Images/15187654148852_ic_favorite_border.png')
+    var sourceImage = require('../Images/ic_favorite_border.png')
     if (this.props.favoritesFilm.findIndex(item => item.id === this.state.film.id) !== -1) {
     
-      sourceImage = require('../Images/15187653912696_ic_favorite.png')
+      sourceImage = require('../Images/ic_favorite.png')
     }
     return (
       <Image
